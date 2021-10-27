@@ -28,7 +28,7 @@ int get_block_size(){
 
 int mydgetrf(double *A, int *ipiv, int n) 
 {
-    n -= 1;
+    n = n - 1;
     /* add your code here */
     int i, t, j, k;
     for (i = 1; i < n; i ++)
@@ -101,7 +101,7 @@ int mydgetrf(double *A, int *ipiv, int n)
 void mydtrsv(char UPLO, double *A, double *B, int n, int *ipiv)
 {
     /* add your code here */
-    n -= 1;
+    n = n - 1;
     int y[n];
 
     if (UPLO == 'U')  //forward substitution
