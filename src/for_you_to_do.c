@@ -45,9 +45,9 @@ int mydgetrf(double *A, int *ipiv, int n)
             if (maxind != i)
             {
                 //save pivoting infomation
-                int temps = ipvt[i];
-                ipvt[i] = ipvt[maxind];
-                ipvt[maxind] = temps;
+                int temps = ipiv[i];
+                ipiv[i] = ipiv[maxind];
+                ipiv[maxind] = temps;
                 //swap rows
                 int tempv = A[i];
                 A[i] = A[maxind];
