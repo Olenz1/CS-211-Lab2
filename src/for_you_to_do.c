@@ -102,7 +102,6 @@ void mydtrsv(char UPLO, double *A, double *B, int n, int *ipiv)
     {
         int i, j;
         y[1] = B[ipiv[1]];
-        printf("ipiv : %d", ipiv[1]);
         for (i = 2; i <= n; i ++)
         {
             int sum = 0;
@@ -112,7 +111,7 @@ void mydtrsv(char UPLO, double *A, double *B, int n, int *ipiv)
         }
     }else if (UPLO == 'L')  //backward substitution
     {
-        int x[n] = y[n] / A[n * n];
+        int x[n] = y[n] / A[n * n + n];
         int i, j;
         for (i = n - 1; i >= 1; i--)
         {
