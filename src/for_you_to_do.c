@@ -49,9 +49,12 @@ int mydgetrf(double *A, int *ipiv, int n)
                 ipiv[i] = ipiv[maxind];
                 ipiv[maxind] = temps;
                 //swap rows
-                int tempv = A[n + i];
-                A[i + n] = A[maxind + n];
-                A[maxind + n] = tempv;
+                for (int j = 0; j < n; j ++)
+                {
+                    int tempv = A[n * i + j];
+                    A[i * n + j] = A[maxind * n + j];
+                    A[maxind * n + j] = tempv;
+                }
             }
         }
         //factorization
@@ -101,7 +104,7 @@ void mydtrsv(char UPLO, double *A, double *B, int n, int *ipiv)
     if (UPLO == 'U')  //forward substitution
     {
         int i, j;
-        y[1] = B[ipiv[1]];
+        y[0] = B[ipiv[0]];
         for (i = 2; i <= n; i ++)
         {
             int sum = 0;
@@ -111,8 +114,9 @@ void mydtrsv(char UPLO, double *A, double *B, int n, int *ipiv)
         }
     }else if (UPLO == 'L')  //backward substitution
     {
-        int x[n] = y[n] / A[n * n + n];
+        int x[n];
         int i, j;
+        x[n - 1] = y[n - 1] / A[n * n -2*n + 1 + n];
         for (i = n - 1; i >= 1; i--)
         {
             int sum = 0;
