@@ -33,18 +33,15 @@ int mydgetrf(double *A, int *ipiv, int n)
     for (i = 1; i < n; i ++)
     {
         int maxind = i + 1;
-        int max = abs(A(i,i));
+        int max = abs(A[i,i]);
         for (t = i + 1; t <= n; t ++)
             if (abs(A[t,i]) > max)
             {
                 maxind = t;
                 max = abs(A[t,i]);
             }
-        if (max == 0)
-        {
-            sout << "LUfactoration failed:coefficient matrix is singular" << endl;
-            return -1;
-        }esle {
+        if (max == 0)   return -1;
+        else {
             if (maxind != i)
             {
                 //save pivoting infomation
