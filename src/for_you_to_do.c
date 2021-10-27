@@ -28,14 +28,13 @@ int get_block_size(){
 
 int mydgetrf(double *A, int *ipiv, int n) 
 {
-    n = n - 1;
     /* add your code here */
     int i, t, j, k;
-    for (i = 1; i < n; i ++)
+    for (i = 0; i < n - 1; i ++)
     {
-        int maxind = i + 1;
+        int maxind = i;
         int max = abs(A[i * n + i]);
-        for (t = i + 1; t <= n; t ++)
+        for (t = i; t < n; t ++)
             if (abs(A[t * n + i]) > max)
             {
                 maxind = t;
@@ -60,10 +59,10 @@ int mydgetrf(double *A, int *ipiv, int n)
             }
         }
         //factorization
-        for (j = i + 1; j <= n; j ++)
+        for (j = i; j < n; j ++)
         {
             A[j * n + i] /= A[i * n + i];
-            for (k = i + 1; k <= n; k ++ )
+            for (k = i; k < n; k ++ )
                 A[j * n + k] = A[j * n + k] - A[j * n + i] * A[i * n + k];
         }
     }
@@ -101,17 +100,17 @@ int mydgetrf(double *A, int *ipiv, int n)
 void mydtrsv(char UPLO, double *A, double *B, int n, int *ipiv)
 {
     /* add your code here */
-    n = n - 1;
+    n -= 1;
     int y[n];
 
     if (UPLO == 'U')  //forward substitution
     {
         int i, j;
         y[0] = B[ipiv[0]];
-        for (i = 2; i <= n; i ++)
+        for (i = 1; i < n; i ++)
         {
             int sum = 0;
-            for (j = 1; j <= i - 1; j ++)
+            for (j = 0; j < i - 1; j ++)
                 sum += y[j] * A[i * n + j];
             y[i] = B[ipiv[i]] - sum;
         }
@@ -119,11 +118,11 @@ void mydtrsv(char UPLO, double *A, double *B, int n, int *ipiv)
     {
         int x[n];
         int i, j;
-        x[n - 1] = y[n - 1] / A[n * n + n];
-        for (i = n - 1; i >= 1; i--)
+        x[n - 1] = y[n - 1] / A[n * n - 2*n + 1 + n];
+        for (i = n - 1 - 1; i >= 0; i--)
         {
             int sum = 0;
-            for (j = i + 1; j <= n; j++)
+            for (j = i; j < n; j++)
                 sum += x[j] * A[i * n + j];
             x[i] = (y[i] - sum) / A[i * n + i];
         }
@@ -186,4 +185,5 @@ int mydgetrf_block(double *A, int *ipiv, int n, int b)
 {
     return 0;
 }
+
 
