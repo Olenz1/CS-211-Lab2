@@ -28,7 +28,42 @@ int get_block_size(){
 
 int mydgetrf(double *A, int *ipiv, int n) 
 {
-    /* add your code here */
+    /* add your code here */、
+    for (int i = 1; i < n; i ++)
+    {
+        int maxind = i + 1;
+        int max = abs(A(i,i));
+        for (int t = i + 1; t <= n; t ++)
+            if (abs(A[t,i]) > max)
+            {
+                maxind = t;
+                max = abs(A[t,i]);
+            }
+        if (max == 0)
+        {
+            sout << "LUfactoration failed:coefficient matrix is singular" << endl;
+            return -1;
+        }esle {
+            if (maxind != i)
+            {
+                //save pivoting infomation
+                int temps = ipvt(i);
+                ipvt(i) = ipvt(maxind);
+                ipvt(maxind) = temps;
+                //swap rows
+                int tempv = A[i];
+                A[i] = A[maxind];
+                A[maxind] = tempv;
+            }
+        }
+        //factorization
+        for (int j = i + 1; j <= n; j ++)
+        {
+            A[j][i] /= A[i][i];
+            for (int k = i + 1; k <= n; k ++ )
+                A[j][k] = A[j][k] - A[j][i] * A[i][k];
+        }
+    }
 
     return 0;
 }
