@@ -33,12 +33,12 @@ int mydgetrf(double *A, int *ipiv, int n)
     for (i = 1; i < n; i ++)
     {
         int maxind = i + 1;
-        int max = abs(A[i,i]);
+        int max = abs(A[i * n + i]);
         for (t = i + 1; t <= n; t ++)
-            if (abs(A[t,i]) > max)
+            if (abs(A[t * n + i]) > max)
             {
                 maxind = t;
-                max = abs(A[t,i]);
+                max = abs(A[t * n + i]);
             }
         if (max == 0)   return -1;
         else {
@@ -49,17 +49,17 @@ int mydgetrf(double *A, int *ipiv, int n)
                 ipiv[i] = ipiv[maxind];
                 ipiv[maxind] = temps;
                 //swap rows
-                int tempv = A[i];
-                A[i] = A[maxind];
-                A[maxind] = tempv;
+                int tempv = A[n + i];
+                A[i + n] = A[maxind + n];
+                A[maxind + n] = tempv;
             }
         }
         //factorization
         for (j = i + 1; j <= n; j ++)
         {
-            A[j][i] /= A[i][i];
+            A[j * n + i] /= A[i * n + i];
             for (k = i + 1; k <= n; k ++ )
-                A[j][k] = A[j][k] - A[j][i] * A[i][k];
+                A[j * n + k] = A[j * n + k] - A[j * n + i] * A[i * n + k];
         }
     }
 
