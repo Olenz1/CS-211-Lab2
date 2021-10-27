@@ -100,7 +100,6 @@ int mydgetrf(double *A, int *ipiv, int n)
 void mydtrsv(char UPLO, double *A, double *B, int n, int *ipiv)
 {
     /* add your code here */
-    n -= 1;
     int y[n];
 
     if (UPLO == 'U')  //forward substitution
@@ -185,5 +184,4 @@ int mydgetrf_block(double *A, int *ipiv, int n, int b)
 {
     return 0;
 }
-
 
