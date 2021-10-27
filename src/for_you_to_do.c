@@ -101,13 +101,13 @@ void mydtrsv(char UPLO, double *A, double *B, int n, int *ipiv)
     if (UPLO == 'U')  //forward substitution
     {
         int i, j;
-        y[1] = B[ipvt[1]];
+        y[1] = B[ipiv[1]];
         for (i = 2; i <= n; i ++)
         {
             int sum = 0;
             for (j = 1; j <= i - 1; j ++)
                 sum += y[j] * A[i * n + j];
-            y[i] = b[ipvt[i]] - sum;
+            y[i] = B[ipiv[i]] - sum;
         }
     }else if (UPLO == 'L')  //backward substitution
     {
@@ -133,7 +133,7 @@ void mydgemm(double *A, double *B, double *C, int n, int i, int j, int k, int b)
 {
     /* add your code here */
     /* please just copy from your lab1 function optimal( ... ) */
-    int i, j, k, i1, j1, k1;
+    int i1, j1, k1;
 		for (i = 0; i < n; i += b)
 			for (j = 0; j < n; j += b)
 				for (k = 0; k < n; k += b)
