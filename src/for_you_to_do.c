@@ -96,6 +96,31 @@ int mydgetrf(double *A, int *ipiv, int n)
 void mydtrsv(char UPLO, double *A, double *B, int n, int *ipiv)
 {
     /* add your code here */
+    int y[n];
+
+    if (UPLO == 'U')  //forward substitution
+    {
+        int i, j;
+        y[1] = B[ipvt[1]];
+        for (i = 2; i <= n; i ++)
+        {
+            int sum = 0;
+            for (j = 1; j <= i - 1; j ++)
+                sum += y[j] * A[i * n + j];
+            y[i] = b[ipvt[i]] - sum;
+        }
+    }else if (UPLO == 'L')  //backward substitution
+    {
+        int x[n] = y[n] / A[n * n + n];
+        int i, j;
+        for (i = n - 1; i >= 1; i--)
+        {
+            int sum = 0;
+            for (j = i + 1; j <= n; j++)
+                sum += x[j] * A[i * n + j];
+            x[i] = (y[i] - sum) / A[i * n + i];
+        }
+    }
     return;
 }
 
@@ -108,6 +133,17 @@ void mydgemm(double *A, double *B, double *C, int n, int i, int j, int k, int b)
 {
     /* add your code here */
     /* please just copy from your lab1 function optimal( ... ) */
+    int i, j, k, i1, j1, k1;
+		for (i = 0; i < n; i += b)
+			for (j = 0; j < n; j += b)
+				for (k = 0; k < n; k += b)
+					for (i1 = i; i1 < i + b; i1++)
+						for (j1 = j; j1 < j + b; j1++) {
+							register double r = C[i1 * n + j1];
+							for (k1 = k; k1 < k + b; k1++)
+								r += A[i1 * n + k1] * B[k1 * n + j1];
+							C[i1 * n + j1] = r;
+						}
     return;
 }
 
