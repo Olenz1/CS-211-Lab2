@@ -28,12 +28,13 @@ int get_block_size(){
 
 int mydgetrf(double *A, int *ipiv, int n) 
 {
-    /* add your code here */、
-    for (int i = 1; i < n; i ++)
+    /* add your code here */
+    int i, t, j, k;
+    for (i = 1; i < n; i ++)
     {
         int maxind = i + 1;
         int max = abs(A(i,i));
-        for (int t = i + 1; t <= n; t ++)
+        for (t = i + 1; t <= n; t ++)
             if (abs(A[t,i]) > max)
             {
                 maxind = t;
@@ -57,10 +58,10 @@ int mydgetrf(double *A, int *ipiv, int n)
             }
         }
         //factorization
-        for (int j = i + 1; j <= n; j ++)
+        for (j = i + 1; j <= n; j ++)
         {
             A[j][i] /= A[i][i];
-            for (int k = i + 1; k <= n; k ++ )
+            for (k = i + 1; k <= n; k ++ )
                 A[j][k] = A[j][k] - A[j][i] * A[i][k];
         }
     }
