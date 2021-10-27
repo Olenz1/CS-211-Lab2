@@ -49,7 +49,8 @@ int mydgetrf(double *A, int *ipiv, int n)
                 ipiv[i] = ipiv[maxind];
                 ipiv[maxind] = temps;
                 //swap rows
-                for (int j = 0; j < n; j ++)
+                int j;
+                for (j = 0; j < n; j ++)
                 {
                     int tempv = A[n * i + j];
                     A[i * n + j] = A[maxind * n + j];
