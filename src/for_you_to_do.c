@@ -111,7 +111,7 @@ void mydtrsv(char UPLO, double *A, double *B, int n, int *ipiv)
             y[i] = B[ipiv[i]] - sum;
         }
     }else if (UPLO == 'L')  //backward substitution
-    {d
+    {
         int x[n] = y[n] / A[n * n + n];
         int i, j;
         for (i = n - 1; i >= 1; i--)
