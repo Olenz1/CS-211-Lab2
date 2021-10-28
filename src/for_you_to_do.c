@@ -28,43 +28,43 @@ int get_block_size(){
 
 int mydgetrf(double *A, int *ipiv, int n) 
 {
-//     /* add your code here */
-//     int i, t, j, k;
-//     for (i = 0; i < n - 1; i ++)
-//     {
-//         //pivoting
-//         int maxind = i;
-//         int max = abs(A[i * n + i]);
-//         for (t = i; t < n; t ++)
-//             if (abs(A[t * n + i]) > max)
-//             {
-//                 maxind = t;
-//                 max = abs(A[t * n + i]);
-//             }
-//         if (max == 0)   return -1;
-//         else if (maxind != i)
-//         {
-//             //save pivoting infomation
-//             int temps = ipiv[i];
-//             ipiv[i] = ipiv[maxind];
-//             ipiv[maxind] = temps;
-//             //swap rows
-//             int j;
-//             for (j = 0; j < n; j ++)
-//             {
-//                 int tempv = A[n * i + j];
-//                 A[i * n + j] = A[maxind * n + j];
-//                 A[maxind * n + j] = tempv;
-//             }
-//         }
-//         //factorization
-//         for (j = i; j < n; j ++)
-//         {
-//             A[j * n + i] = A[j * n + i] / A[i * n + i];
-//             for (k = i; k < n; k ++ )
-//                 A[j * n + k] = A[j * n + k] - A[j * n + i] * A[i * n + k];
-//         }
-//     }
+    /* add your code here */
+    int i, t, j, k;
+    for (i = 0; i < n - 1; i ++)
+    {
+        //pivoting
+        int maxind = i;
+        int max = abs(A[i * n + i]);
+        for (t = i; t < n; t ++)
+            if (abs(A[t * n + i]) > max)
+            {
+                maxind = t;
+                max = abs(A[t * n + i]);
+            }
+        if (max == 0)   return -1;
+        else if (maxind != i)
+        {
+            //save pivoting infomation
+            int temps = ipiv[i];
+            ipiv[i] = ipiv[maxind];
+            ipiv[maxind] = temps;
+            //swap rows
+            int j;
+            for (j = 0; j < n; j ++)
+            {
+                int tempv = A[n * i + j];
+                A[i * n + j] = A[maxind * n + j];
+                A[maxind * n + j] = tempv;
+            }
+        }
+        //factorization
+        for (j = i; j < n; j ++)
+        {
+            A[j * n + i] = A[j * n + i] / A[i * n + i];
+            for (k = i; k < n; k ++ )
+                A[j * n + k] = A[j * n + k] - A[j * n + i] * A[i * n + k];
+        }
+    }
 
     return 0;
 }
