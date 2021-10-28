@@ -30,12 +30,12 @@ int mydgetrf(double *A, int *ipiv, int n)
 {
     /* add your code here */
     int i, t, j, k;
-    for (i = 1; i <= n - 1; i ++)
+    for (i = 0; i < n - 1; i ++)
     {
         //pivoting
         int maxind = i;
         int max = abs(A[i * n + i]);
-        for (t = i + 1; t <= n; t ++)
+        for (t = i; t < n; t ++)
             if (abs(A[t * n + i]) > max)
             {
                 maxind = t;
@@ -50,7 +50,7 @@ int mydgetrf(double *A, int *ipiv, int n)
             ipiv[maxind] = temps;
             //swap rows
             int j;
-            for (j = 1; j <= n; j ++)
+            for (j = 0; j < n; j ++)
             {
                 int tempv = A[n * i + j];
                 A[i * n + j] = A[maxind * n + j];
@@ -58,10 +58,10 @@ int mydgetrf(double *A, int *ipiv, int n)
             }
         }
         //factorization
-        for (j = i + 1; j <= n; j ++)
+        for (j = i; j < n; j ++)
         {
             A[j * n + i] = A[j * n + i] / A[i * n + i];
-            for (k = i + 1; k <= n; k ++ )
+            for (k = i; k < n; k ++ )
                 A[j * n + k] = A[j * n + k] - A[j * n + i] * A[i * n + k];
         }
     }
@@ -103,10 +103,10 @@ void mydtrsv(char UPLO, double *A, double *B, int n, int *ipiv)
   //forward substitution
     int i, j;
     y[0] = B[ipiv[0]];
-    for (i = 2; i <= n; i ++)
+    for (i = 1; i < n; i ++)
     {
         int sum = 0;
-        for (j = 1; j <= i - 1; j ++) {
+        for (j = 0; j < i - 1; j ++) {
             sum += y[j] * A[i * n + j];
             y[i] = B[ipiv[i]] - sum;
         }
@@ -115,10 +115,10 @@ void mydtrsv(char UPLO, double *A, double *B, int n, int *ipiv)
     {
         int x[n];
         x[n - 1] = y[n - 1] / A[n * n - n + n - 1];
-        for (i = n - 1 ; i >= 1; i--)
+        for (i = n - 1 - 1; i >= 0; i--)
         {
             int sum = 0;
-            for (j = i + 1; j <= n; j++) {
+            for (j = i; j < n; j++) {
                 sum += x[j] * A[i * n + j];
                 x[i] = (y[i] - sum) / A[i * n + i];
             }
@@ -179,7 +179,7 @@ void mydgemm(double *A, double *B, double *C, int n, int i, int j, int k, int b)
  * 
  **/
 int mydgetrf_block(double *A, int *ipiv, int n, int b) 
-{/*
+{
     int ib, t, j, k;
     for (ib = 0; ib < n - 1; ib += b)
     {
@@ -220,42 +220,12 @@ int mydgetrf_block(double *A, int *ipiv, int n, int b)
         for (j = ib - 1; ib < end; ib += b)
         {
             for (k = end; k < n; k += b)
-                A[j * n + k] = LL-1 * A[j * n + k];
+                for (j1 = ib - 1; j1 < end; j1 += b)
+                A[j * n + k] = A[j * n + k] / A[j * n + j1];
             for (k = end; k < n; k += b)  
                 for (k1 = end; k1 < n; k1 += b)
                     A[k * n + k1] -= A[k * n + j] * A[j * n + k];
         }
-    }*/
+    }
     return 0;
 }
-
-// for i = 1 to n-1
-//      A(i+1:n,i) = A(i+1:n,i) / A(i,i)         … BLAS 1 (scale a vector)
-//      A(i+1:n,i+1:n) = A(i+1:n , i+1:n )  … BLAS 2 (rank-1 update)
-//               - A(i+1:n , i) * A(i , i+1:n)
-
-//     i = i
-//     j = i+1:n
-//     k = i+1:n
-
-//         for (j = i; j < n; j ++)
-//             A[j * n + i] /= A[i * n + i];
-//         for (j = i; j < n; j ++)
-//             for (k = i; k < n; k ++)
-//                 A[j * n + k] = A[j * n + k] - A[j * n + i] * A[i * n + k]
-
-// for ib = 1:n-1   b
-//      A(ib:end , end+1:n) = LL-1 * A(ib:end , end+1:n)
-//      A(end+1:n , end+1:n ) = A(end+1:n , end+1:n )
-//                   - A(end+1:n , ib:end) * A(ib:end , end+1:n) 
-
-//     i = ib
-//     j = ib:end
-//     k = end+1:n
-
-// for (j = ib - 1; ib < end; ib += b)
-//     for (k = end; k < n; k += b)
-//         A[j * n + k] = LL-1 * A[j * n + k];
-//     for (k = end; k < n; k += b)  
-//         for (k1 = end; k1 < n; k1 += b)
-//             A[k * n + k1] -= A[k * n + j] * A[j * n + k];
