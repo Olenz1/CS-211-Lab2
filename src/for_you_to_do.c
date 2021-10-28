@@ -123,8 +123,9 @@ void mydtrsv(char UPLO, double *A, double *B, int n, int *ipiv)
                 x[i] = (y[i] - sum) / A[i * n + i];
             }
         }
+	printf("x[1]:%d,y[1]:%d", x[1], y[1]);
+
     }
-    printf("x[1]:%d,y[1]:%d", x[1], y[1]);
     return;
 }
 
