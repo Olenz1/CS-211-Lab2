@@ -217,13 +217,13 @@ int mydgetrf_block(double *A, int *ipiv, int n, int b)
         //     for (k = ib; k < n; k ++)
         //         A[j * n + k] = A[j * n + k] - A[j * n + ib] * A[ib * n + k]
         
-        for (j = ib - 1; ib < end; ib += b)
+        for (j = ib - 1; ib < end; ib ++)
         {
-            for (k = end; k < n; k += b)
-                for (j1 = ib - 1; j1 < end; j1 += b)
+            for (k = end; k < n; k ++)
+                for (j1 = ib - 1; j1 < end; j1 ++)
                     A[j * n + k] = A[j * n + k] / A[j * n + j1];
-            for (k = end; k < n; k += b)  
-                for (k1 = end; k1 < n; k1 += b)
+            for (k = end; k < n; k ++)  
+                for (k1 = end; k1 < n; k1 ++)
                     A[k * n + k1] -= A[k * n + j] * A[j * n + k];
         }
     }
