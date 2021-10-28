@@ -117,7 +117,7 @@ void mydtrsv(char UPLO, double *A, double *B, int n, int *ipiv)
     {
         int x[n];
         int i, j;
-        x[n - 1] = y[n - 1] / A[n * n - 2*n + 1 + n];
+        x[n - 1] = A[n * n - n + n]/*y[n - 1]*/ / A[n * n - n + n - 1];
         for (i = n - 1 - 1; i >= 0; i--)
         {
             int sum = 0;
