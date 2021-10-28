@@ -99,7 +99,7 @@ int mydgetrf(double *A, int *ipiv, int n)
 void mydtrsv(char UPLO, double *A, double *B, int n, int *ipiv)
 {
     /* add your code here */
-    int y[n];
+    int y[n], x[n];
   //forward substitution
     int i, j;
     y[0] = B[ipiv[0]];
@@ -108,20 +108,20 @@ void mydtrsv(char UPLO, double *A, double *B, int n, int *ipiv)
         int sum = 0;
         for (j = 0; j < i - 1; j ++) {
             sum += y[j] * A[i * n + j];
-            y[i] = B[ipiv[i]] - sum;
         }
+        y[i] = B[ipiv[i]] - sum;
+
     }
     if (UPLO == 'L')  //backward substitution
     {
-        int x[n];
         x[n - 1] = y[n - 1] / A[n * n - n + n - 1];
         for (i = n - 1 - 1; i >= 0; i--)
         {
             int sum = 0;
             for (j = i; j < n; j++) {
                 sum += x[j] * A[i * n + j];
-                x[i] = (y[i] - sum) / A[i * n + i];
             }
+            x[i] = (y[i] - sum) / A[i * n + i];
         }
     }
     return;
