@@ -65,7 +65,7 @@ int mydgetrf(double *A, int *ipiv, int n)
                 A[j * n + k] = A[j * n + k] - A[j * n + i] * A[i * n + k];
         }
     }
-    printf("A[10*n + 10] : %d",A[10*n + 10]);
+
     return 0;
 }
 
@@ -123,8 +123,6 @@ void mydtrsv(char UPLO, double *A, double *B, int n, int *ipiv)
                 x[i] = (y[i] - sum) / A[i * n + i];
             }
         }
-	printf("x[1]:%d,y[1]:%d", x[1], y[1]);
-
     }
     return;
 }
@@ -223,7 +221,7 @@ int mydgetrf_block(double *A, int *ipiv, int n, int b)
         {
             for (k = end; k < n; k += b)
                 for (j1 = ib - 1; j1 < end; j1 += b)
-                A[j * n + k] = A[j * n + k] / A[j * n + j1];
+                    A[j * n + k] = A[j * n + k] / A[j * n + j1];
             for (k = end; k < n; k += b)  
                 for (k1 = end; k1 < n; k1 += b)
                     A[k * n + k1] -= A[k * n + j] * A[j * n + k];
