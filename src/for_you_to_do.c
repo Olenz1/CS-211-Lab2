@@ -186,7 +186,7 @@ int mydgetrf_block(double *A, int *ipiv, int n, int b)
         int end = ib + b - 1;
         int maxind = ib;
         int max = abs(A[ib * n + ib]);
-        for (t = ib; t < n; t += b)
+        for (t = ib; t < n; t ++)
             if (abs(A[t * n + ib]) > max)
             {
                 maxind = t;
@@ -202,7 +202,7 @@ int mydgetrf_block(double *A, int *ipiv, int n, int b)
                 ipiv[maxind] = temps;
                 //swap rows
                 int j;
-                for (j = 0; j < n; j += b)
+                for (j = 0; j < n; j ++)
                 {
                     double tempv = A[n * ib + j];
                     A[ib * n + j] = A[maxind * n + j];
