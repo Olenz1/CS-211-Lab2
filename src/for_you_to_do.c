@@ -220,8 +220,7 @@ int mydgetrf_block(double *A, int *ipiv, int n, int b)
         for (j = ib - 1; ib < end; ib ++)
         {
             for (k = end; k < n; k ++)
-                for (j1 = ib - 1; j1 < end; j1 ++)
-                    A[j * n + k] = A[j * n + k] / A[j * n + j1];
+                    A[j * n + k] = A[j * n + k] / A[j * n + j];
             for (k = end; k < n; k ++)  
                 for (k1 = end; k1 < n; k1 ++)
                     A[k * n + k1] -= A[k * n + j] * A[j * n + k];
@@ -254,9 +253,12 @@ int mydgetrf_block(double *A, int *ipiv, int n, int b)
 //     j = ib:end
 //     k = end+1:n
 
-// for (j = ib - 1; ib < end; ib += b)
-//     for (k = end; k < n; k += b)
-//         A[j * n + k] = LL-1 * A[j * n + k];
-//     for (k = end; k < n; k += b)  
-//         for (k1 = end; k1 < n; k1 += b)
-//             A[k * n + k1] -= A[k * n + j] * A[j * n + k];
+// for (j = ib - 1; ib < end; ib ++)
+//         {
+//             for (k = end; k < n; k ++)
+//                 for (j1 = ib - 1; j1 < end; j1 ++)
+//                     A[j * n + k] = A[j * n + k] / A[j * n + j1];
+//             for (k = end; k < n; k ++)  
+//                 for (k1 = end; k1 < n; k1 ++)
+//                     A[k * n + k1] -= A[k * n + j] * A[j * n + k];
+//         }
