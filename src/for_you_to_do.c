@@ -99,7 +99,7 @@ int mydgetrf(double *A, int *ipiv, int n)
 void mydtrsv(char UPLO, double *A, double *B, int n, int *ipiv)
 {
     /* add your code here */
-    int y[n], x[n];
+    double y[n], x[n];
   //forward substitution
     int i, j;
     y[0] = B[ipiv[0]];
