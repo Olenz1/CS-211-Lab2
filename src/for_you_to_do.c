@@ -99,8 +99,9 @@ int mydgetrf(double *A, int *ipiv, int n)
 void mydtrsv(char UPLO, double *A, double *B, int n, int *ipiv)
 {
     /* add your code here */
-    double* y = (double*)malloc(sizeof(double) * n);
-    double* x = (double*)malloc(sizeof(double) * n);
+    double* y, *x;
+    y = (double*)malloc(sizeof(double) * n * n);
+    x = (double*)malloc(sizeof(double) * n * n);
   //forward substitution
     int i, j;
     y[0] = B[ipiv[0]];
