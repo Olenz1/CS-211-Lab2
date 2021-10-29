@@ -34,12 +34,12 @@ int mydgetrf(double *A, int *ipiv, int n)
     {
         //pivoting
         int maxind = i;
-        int max = abs(A[i * n + i]);
+        double max = fabs(A[i * n + i]);
         for (t = i; t < n; t ++)
-            if (abs(A[t * n + i]) > max)
+            if (fabs(A[t * n + i]) > max)
             {
                 maxind = t;
-                max = abs(A[t * n + i]);
+                max = fabs(A[t * n + i]);
             }
         if (max == 0)   return -1;
         else if (maxind != i)
@@ -99,14 +99,14 @@ int mydgetrf(double *A, int *ipiv, int n)
 void mydtrsv(char UPLO, double *A, double *B, int n, int *ipiv)
 {
     /* add your code here */
-    int* y = (int*)malloc(sizeof(int) * n);
-    int* x = (int*)malloc(sizeof(int) * n);
+    double* y = (double*)malloc(sizeof(double) * n);
+    double* x = (double*)malloc(sizeof(double) * n);
   //forward substitution
     int i, j;
     y[0] = B[ipiv[0]];
     for (i = 1; i < n; i ++)
     {
-        int sum = 0;
+        double sum = 0;
         for (j = 0; j < i - 1; j ++) {
             sum += y[j] * A[i * n + j];
         }
@@ -118,7 +118,7 @@ void mydtrsv(char UPLO, double *A, double *B, int n, int *ipiv)
         x[n - 1] = y[n - 1] / A[n * n - n + n - 1];
         for (i = n - 1 - 1; i >= 0; i--)
         {
-            int sum = 0;
+            double sum = 0;
             for (j = i; j < n; j++) {
                 sum += x[j] * A[i * n + j];
             }
@@ -186,12 +186,12 @@ int mydgetrf_block(double *A, int *ipiv, int n, int b)
     {
         int end = ib + b - 1;
         int maxind = ib;
-        int max = abs(A[ib * n + ib]);
+        double max = fabs(A[ib * n + ib]);
         for (t = ib; t < n; t ++)
-            if (abs(A[t * n + ib]) > max)
+            if (fabs(A[t * n + ib]) > max)
             {
                 maxind = t;
-                max = abs(A[t * n + ib]);
+                max = fabs(A[t * n + ib]);
             }
         if (max == 0)   return -1;
         else {
