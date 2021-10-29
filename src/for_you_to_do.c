@@ -98,32 +98,33 @@ int mydgetrf(double *A, int *ipiv, int n)
  **/
 void mydtrsv(char UPLO, double *A, double *B, int n, int *ipiv)
 {
-//     /* add your code here */
-//     int y[n], x[n];
-//   //forward substitution
-//     int i, j;
-//     y[0] = B[ipiv[0]];
-//     for (i = 1; i < n; i ++)
-//     {
-//         int sum = 0;
-//         for (j = 0; j < i - 1; j ++) {
-//             sum += y[j] * A[i * n + j];
-//         }
-//         y[i] = B[ipiv[i]] - sum;
+    /* add your code here */
+    int* y = (int*)malloc(sizeof(int) * n);
+    int* x = (int*)malloc(sizeof(int) * n);
+  //forward substitution
+    int i, j;
+    y[0] = B[ipiv[0]];
+    for (i = 1; i < n; i ++)
+    {
+        int sum = 0;
+        for (j = 0; j < i - 1; j ++) {
+            sum += y[j] * A[i * n + j];
+        }
+        y[i] = B[ipiv[i]] - sum;
 
-//     }
-//     if (UPLO == 'L')  //backward substitution
-//     {
-//         x[n - 1] = y[n - 1] / A[n * n - n + n - 1];
-//         for (i = n - 1 - 1; i >= 0; i--)
-//         {
-//             int sum = 0;
-//             for (j = i; j < n; j++) {
-//                 sum += x[j] * A[i * n + j];
-//             }
-//             x[i] = (y[i] - sum) / A[i * n + i];
-//         }
-//     }
+    }
+    if (UPLO == 'L')  //backward substitution
+    {
+        x[n - 1] = y[n - 1] / A[n * n - n + n - 1];
+        for (i = n - 1 - 1; i >= 0; i--)
+        {
+            int sum = 0;
+            for (j = i; j < n; j++) {
+                sum += x[j] * A[i * n + j];
+            }
+            x[i] = (y[i] - sum) / A[i * n + i];
+        }
+    }
     return;
 }
 
@@ -136,17 +137,17 @@ void mydgemm(double *A, double *B, double *C, int n, int i, int j, int k, int b)
 {
     /* add your code here */
     /* please just copy from your lab1 function optimal( ... ) */
-//     int i1, j1, k1;
-// 		for (i = 0; i < n; i += b)
-// 			for (j = 0; j < n; j += b)
-// 				for (k = 0; k < n; k += b)
-// 					for (i1 = i; i1 < i + b; i1++)
-// 						for (j1 = j; j1 < j + b; j1++) {
-// 							register double r = C[i1 * n + j1];
-// 							for (k1 = k; k1 < k + b; k1++)
-// 								r += A[i1 * n + k1] * B[k1 * n + j1];
-// 							C[i1 * n + j1] = r;
-// 						}
+    int i1, j1, k1;
+		for (i = 0; i < n; i += b)
+			for (j = 0; j < n; j += b)
+				for (k = 0; k < n; k += b)
+					for (i1 = i; i1 < i + b; i1++)
+						for (j1 = j; j1 < j + b; j1++) {
+							register double r = C[i1 * n + j1];
+							for (k1 = k; k1 < k + b; k1++)
+								r += A[i1 * n + k1] * B[k1 * n + j1];
+							C[i1 * n + j1] = r;
+						}
     return;
 }
 
@@ -180,52 +181,52 @@ void mydgemm(double *A, double *B, double *C, int n, int i, int j, int k, int b)
  **/
 int mydgetrf_block(double *A, int *ipiv, int n, int b) 
 {
-//     int ib, t, j, k, j1, k1;
-//     for (ib = 0; ib < n - 1; ib += b)
-//     {
-//         int end = ib + b - 1;
-//         int maxind = ib;
-//         int max = abs(A[ib * n + ib]);
-//         for (t = ib; t < n; t ++)
-//             if (abs(A[t * n + ib]) > max)
-//             {
-//                 maxind = t;
-//                 max = abs(A[t * n + ib]);
-//             }
-//         if (max == 0)   return -1;
-//         else {
-//             if (maxind != ib)
-//             {
-//                 //save pivoting infomation
-//                 int temps = ipiv[ib];
-//                 ipiv[ib] = ipiv[maxind];
-//                 ipiv[maxind] = temps;
-//                 //swap rows
-//                 int j;
-//                 for (j = 0; j < n; j ++)
-//                 {
-//                     double tempv = A[n * ib + j];
-//                     A[ib * n + j] = A[maxind * n + j];
-//                     A[maxind * n + j] = tempv;
-//                 }
-//             }
-//         }
-//         //factorization
-//         // for (j = ib; j < n; j ++)
-//         //     A[j * n + ib] /= A[ib * n + ib];
-//         // for (j = ib; j < n; j ++)
-//         //     for (k = ib; k < n; k ++)
-//         //         A[j * n + k] = A[j * n + k] - A[j * n + ib] * A[ib * n + k]
+    int ib, t, j, k, j1, k1;
+    for (ib = 0; ib < n - 1; ib += b)
+    {
+        int end = ib + b - 1;
+        int maxind = ib;
+        int max = abs(A[ib * n + ib]);
+        for (t = ib; t < n; t ++)
+            if (abs(A[t * n + ib]) > max)
+            {
+                maxind = t;
+                max = abs(A[t * n + ib]);
+            }
+        if (max == 0)   return -1;
+        else {
+            if (maxind != ib)
+            {
+                //save pivoting infomation
+                int temps = ipiv[ib];
+                ipiv[ib] = ipiv[maxind];
+                ipiv[maxind] = temps;
+                //swap rows
+                int j;
+                for (j = 0; j < n; j ++)
+                {
+                    double tempv = A[n * ib + j];
+                    A[ib * n + j] = A[maxind * n + j];
+                    A[maxind * n + j] = tempv;
+                }
+            }
+        }
+        //factorization
+        // for (j = ib; j < n; j ++)
+        //     A[j * n + ib] /= A[ib * n + ib];
+        // for (j = ib; j < n; j ++)
+        //     for (k = ib; k < n; k ++)
+        //         A[j * n + k] = A[j * n + k] - A[j * n + ib] * A[ib * n + k]
         
-//         for (j = ib - 1; ib < end; ib ++)
-//         {
-//             for (k = end; k < n; k ++)
-//                     A[j * n + k] = A[j * n + k] / A[j * n + j];
-//             for (k = end; k < n; k ++)  
-//                 for (k1 = end; k1 < n; k1 ++)
-//                     A[k * n + k1] -= A[k * n + j] * A[j * n + k];
-//         }
-//     }
+        for (j = ib - 1; ib < end; ib ++)
+        {
+            for (k = end; k < n; k ++)
+                    A[j * n + k] = A[j * n + k] / A[j * n + j];
+            for (k = end; k < n; k ++)  
+                for (k1 = end; k1 < n; k1 ++)
+                    A[k * n + k1] -= A[k * n + j] * A[j * n + k];
+        }
+    }
     return 0;
 }
 
