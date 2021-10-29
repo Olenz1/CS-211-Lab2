@@ -108,9 +108,8 @@ void mydtrsv(char UPLO, double *A, double *B, int n, int *ipiv)
         double sum = 0;
         for (j = 0; j < i - 1; j ++) {
             sum += y[j] * A[i * n + j];
+            y[i] = B[ipiv[i]] - sum;
         }
-        y[i] = B[ipiv[i]] - sum;
-
     }
     if (UPLO == 'L')  //backward substitution
     {
@@ -120,8 +119,8 @@ void mydtrsv(char UPLO, double *A, double *B, int n, int *ipiv)
             double sum = 0;
             for (j = i; j < n; j++) {
                 sum += x[j] * A[i * n + j];
+                x[i] = (y[i] - sum) / A[i * n + i];
             }
-            x[i] = (y[i] - sum) / A[i * n + i];
         }
     }
     return;
@@ -202,7 +201,7 @@ int mydgetrf_block(double *A, int *ipiv, int n, int b)
     //             ipiv[maxind] = temps;
     //             //swap rows
     //             int j;
-    //             for (j = 0; j < n; j ++)
+    //             for (j = 0; j < n; j +=b)
     //             {
     //                 double tempv = A[n * ib + j];
     //                 A[ib * n + j] = A[maxind * n + j];
@@ -217,13 +216,14 @@ int mydgetrf_block(double *A, int *ipiv, int n, int b)
     //     //     for (k = ib; k < n; k ++)
     //     //         A[j * n + k] = A[j * n + k] - A[j * n + ib] * A[ib * n + k]
         
-    //     for (j = ib; ib < end; ib ++)
+    //     for (j = ib; ib < end; ib +=b)
     //     {
     //         for (k = end; k < n; k ++)
-    //                 A[j * n + k] = A[j * n + k] / A[j * n + j];
-    //         for (k = end; k < n; k ++)  
-    //             for (k1 = end; k1 < n; k1 ++)
-    //                 A[k * n + k1] -= A[k * n + j] * A[j * n + k];
+    //              for (j1 = ib; ib < end; ib +=b)
+    //                 A[j * n + k] = A[j * n + k] / A[j * n + j1];
+    //         for (k = end; k < n; k +=b)  
+    //             for (k1 = end; k1 < n; k1 +=b)
+    //                 A[k * n + k1] -= A[k * n + j] * A[j * n + k1];
     //     }
     // }
     return 0;
