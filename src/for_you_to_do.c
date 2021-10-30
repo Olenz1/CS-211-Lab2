@@ -4,7 +4,7 @@ int get_block_size(){
     //return the block size you'd like to use 
     /*add your code here */
     return 128;
-  
+
 }
 
 /**
@@ -201,7 +201,7 @@ int mydgetrf_block(double *A, int *ipiv, int n, int b)
                 ipiv[maxind] = temps;
                 //swap rows
                 int j;
-                for (j = 0; j < n; j+=b)
+                for (j = 0; j < n; j++)
                 {
                     double tempv = A[n * ib + j];
                     A[ib * n + j] = A[maxind * n + j];
@@ -211,13 +211,13 @@ int mydgetrf_block(double *A, int *ipiv, int n, int b)
         }
         //factorization
 
-        for (j = ib + 1; ib < end; ib += b)
+        for (j = ib + 1; ib < end; ib ++)
         {
-            for (k = end + 1; k < n; k += b)
-                for (j1 = ib; ib < end; ib += b)
+            for (k = end + 1; k < n; k ++)
+                for (j1 = ib; ib < end; ib ++)
                     A[j * n + k] = A[j * n + k] / A[j * n + j1];
-            for (k = end + 1; k < n; k += b)
-                for (k1 = end + 1; k1 < n; k1 += b)
+            for (k = end + 1; k < n; k ++)
+                for (k1 = end + 1; k1 < n; k1 ++)
                     A[k * n + k1] -= A[k * n + j] * A[j * n + k1];
         }
     }
