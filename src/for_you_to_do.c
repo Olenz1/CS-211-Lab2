@@ -28,45 +28,45 @@ int get_block_size(){
 
 int mydgetrf(double *A, int *ipiv, int n) 
 {
-    /* add your code here */
-    int i, t, j, k;
-    for (i = 0; i < n - 1; i++)
-    {
-        if (i == 1023)
-            printf("1023"); 
-        //pivoting
-        int maxind = i;
-        double max = fabs(A[i * n + i]);
-        for (t = i + 1; t < n; t++)
-            if (fabs(A[t * n + i]) > max)
-            {
-                maxind = t;
-                max = fabs(A[t * n + i]);
-            }
-        if (max == 0)   return -1;
-        else if (maxind != i)
-        {
-            //save pivoting infomation
-            int temps = ipiv[i];
-            ipiv[i] = ipiv[maxind];
-            ipiv[maxind] = temps;
-            //swap rows
-            int j;
-            for (j = 0; j < n; j++)
-            {
-                double tempv = A[n * i + j];
-                A[i * n + j] = A[maxind * n + j];
-                A[maxind * n + j] = tempv;
-            }
-        }
-        //factorization
-        for (j = i + 1; j < n; j++)
-        {
-            A[j * n + i] = A[j * n + i] / A[i * n + i];
-            for (k = i + 1; k < n; k++)
-                A[j * n + k] = A[j * n + k] - A[j * n + i] * A[i * n + k];
-        }
-    }
+//     /* add your code here */
+//     int i, t, j, k;
+//     for (i = 0; i < n - 1; i++)
+//     {
+//         if (i == 1023)
+//             printf("1023"); 
+//         //pivoting
+//         int maxind = i;
+//         double max = fabs(A[i * n + i]);
+//         for (t = i + 1; t < n; t++)
+//             if (fabs(A[t * n + i]) > max)
+//             {
+//                 maxind = t;
+//                 max = fabs(A[t * n + i]);
+//             }
+//         if (max == 0)   return -1;
+//         else if (maxind != i)
+//         {
+//             //save pivoting infomation
+//             int temps = ipiv[i];
+//             ipiv[i] = ipiv[maxind];
+//             ipiv[maxind] = temps;
+//             //swap rows
+//             int j;
+//             for (j = 0; j < n; j++)
+//             {
+//                 double tempv = A[n * i + j];
+//                 A[i * n + j] = A[maxind * n + j];
+//                 A[maxind * n + j] = tempv;
+//             }
+//         }
+//         //factorization
+//         for (j = i + 1; j < n; j++)
+//         {
+//             A[j * n + i] = A[j * n + i] / A[i * n + i];
+//             for (k = i + 1; k < n; k++)
+//                 A[j * n + k] = A[j * n + k] - A[j * n + i] * A[i * n + k];
+//         }
+//     }
     return 0;
 }
 
@@ -99,31 +99,31 @@ int mydgetrf(double *A, int *ipiv, int n)
  **/
 void mydtrsv(char UPLO, double *A, double *B, int n, int *ipiv)
 {
-    /* add your code here */
-    double y[n], x[n];
-  //forward substitution
-    int i, j;
-    y[0] = B[ipiv[0]];
-    for (i = 1; i < n; i++)
-    {
-        double sum = 0;
-        for (j = 0; j <= i - 1; j++) {
-            sum += y[j] * A[i * n + j];
-        }
-        y[i] = B[ipiv[i]] - sum;
-    }
-    if (UPLO == 'L')  //backward substitution
-    {
-        x[n - 1] = y[n - 1] / A[n * n - 1];
-        for (i = n - 1 - 1; i >= 0; i--)
-        {
-            double sum = 0;
-            for (j = i + 1; j <= n; j++) {
-                sum += x[j] * A[i * n + j];
-            }
-            x[i] = (y[i] - sum) / A[i * n + i];
-        }
-    }
+//     /* add your code here */
+//     double y[n], x[n];
+//   //forward substitution
+//     int i, j;
+//     y[0] = B[ipiv[0]];
+//     for (i = 1; i < n; i++)
+//     {
+//         double sum = 0;
+//         for (j = 0; j <= i - 1; j++) {
+//             sum += y[j] * A[i * n + j];
+//         }
+//         y[i] = B[ipiv[i]] - sum;
+//     }
+//     if (UPLO == 'L')  //backward substitution
+//     {
+//         x[n - 1] = y[n - 1] / A[n * n - 1];
+//         for (i = n - 1 - 1; i >= 0; i--)
+//         {
+//             double sum = 0;
+//             for (j = i + 1; j <= n; j++) {
+//                 sum += x[j] * A[i * n + j];
+//             }
+//             x[i] = (y[i] - sum) / A[i * n + i];
+//         }
+//     }
     return;
 }
 
