@@ -136,17 +136,17 @@ void mydgemm(double *A, double *B, double *C, int n, int i, int j, int k, int b)
 {
     /* add your code here */
     /* please just copy from your lab1 function optimal( ... ) */
-    int i1, j1, k1;
-		for (i = 0; i < n; i += b)
-			for (j = 0; j < n; j += b)
-				for (k = 0; k < n; k += b)
-					for (i1 = i; i1 < i + b; i1++)
-						for (j1 = j; j1 < j + b; j1++) {
-							register double r = C[i1 * n + j1];
-							for (k1 = k; k1 < k + b; k1++)
-								r += A[i1 * n + k1] * B[k1 * n + j1];
-							C[i1 * n + j1] = r;
-						}
+//     int i1, j1, k1;
+// 		for (i = 0; i < n; i += b)
+// 			for (j = 0; j < n; j += b)
+// 				for (k = 0; k < n; k += b)
+// 					for (i1 = i; i1 < i + b; i1++)
+// 						for (j1 = j; j1 < j + b; j1++) {
+// 							register double r = C[i1 * n + j1];
+// 							for (k1 = k; k1 < k + b; k1++)
+// 								r += A[i1 * n + k1] * B[k1 * n + j1];
+// 							C[i1 * n + j1] = r;
+// 						}
     return;
 }
 
