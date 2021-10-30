@@ -32,8 +32,6 @@ int mydgetrf(double *A, int *ipiv, int n)
     int i, t, j, k;
     for (i = 0; i < n - 1; i++)
     {
-        if (i == 1023)
-            printf("1023"); 
         //pivoting
         int maxind = i;
         double max = fabs(A[i * n + i]);
@@ -107,10 +105,10 @@ void mydtrsv(char UPLO, double *A, double *B, int n, int *ipiv)
     for (i = 1; i < n; i++)
     {
         double sum = 0;
-        for (j = 0; j <= i - 1; j++) {
+        for (j = 0; j < i - 1; j++) {
             sum += y[j] * A[i * n + j];
+            y[i] = B[ipiv[i]] - sum;
         }
-        y[i] = B[ipiv[i]] - sum;
     }
     if (UPLO == 'L')  //backward substitution
     {
@@ -118,10 +116,10 @@ void mydtrsv(char UPLO, double *A, double *B, int n, int *ipiv)
         for (i = n - 1 - 1; i >= 0; i--)
         {
             double sum = 0;
-            for (j = i + 1; j <= n; j++) {
+            for (j = i + 1; j < n; j++) {
                 sum += x[j] * A[i * n + j];
+                x[i] = (y[i] - sum) / A[i * n + i];
             }
-            x[i] = (y[i] - sum) / A[i * n + i];
         }
     }
     return;
@@ -180,48 +178,48 @@ void mydgemm(double *A, double *B, double *C, int n, int i, int j, int k, int b)
  **/
 int mydgetrf_block(double *A, int *ipiv, int n, int b) 
 {
-    // int ib, t, j, k, j1, k1;
-    // for (ib = 0; ib < n - 1; ib += b)
-    // {
-    //     int end = ib + b - 1;
-    //     int maxind = ib;
-    //     double max = fabs(A[ib * n + ib]);
-    //     for (t = ib + 1; t < n; t++)
-    //         if (fabs(A[t * n + ib]) > max)
-    //         {
-    //             maxind = t;
-    //             max = fabs(A[t * n + ib]);
-    //         }
-    //     if (max == 0)   return -1;
-    //     else {
-    //         if (maxind != ib)
-    //         {
-    //             //save pivoting infomation
-    //             int temps = ipiv[ib];
-    //             ipiv[ib] = ipiv[maxind];
-    //             ipiv[maxind] = temps;
-    //             //swap rows
-    //             int j;
-    //             for (j = 0; j < n; j++)
-    //             {
-    //                 double tempv = A[n * ib + j];
-    //                 A[ib * n + j] = A[maxind * n + j];
-    //                 A[maxind * n + j] = tempv;
-    //             }
-    //         }
-    //     }
-    //     //factorization
+    int ib, t, j, k, j1, k1;
+    for (ib = 0; ib < n - 1; ib += b)
+    {
+        int end = ib + b - 1;
+        int maxind = ib;
+        double max = fabs(A[ib * n + ib]);
+        for (t = ib + 1; t < n; t++)
+            if (fabs(A[t * n + ib]) > max)
+            {
+                maxind = t;
+                max = fabs(A[t * n + ib]);
+            }
+        if (max == 0)   return -1;
+        else {
+            if (maxind != ib)
+            {
+                //save pivoting infomation
+                int temps = ipiv[ib];
+                ipiv[ib] = ipiv[maxind];
+                ipiv[maxind] = temps;
+                //swap rows
+                int j;
+                for (j = 0; j < n; j++)
+                {
+                    double tempv = A[n * ib + j];
+                    A[ib * n + j] = A[maxind * n + j];
+                    A[maxind * n + j] = tempv;
+                }
+            }
+        }
+        //factorization
 
-    //     for (j = ib + 1; ib < end; ib ++)
-    //     {
-    //         for (k = end + 1; k < n; k ++)
-    //             for (j1 = ib; ib < end; ib ++)
-    //                 A[j * n + k] = A[j * n + k] / A[j * n + j1];
-    //         for (k = end + 1; k < n; k ++)
-    //             for (k1 = end + 1; k1 < n; k1 ++)
-    //                 A[k * n + k1] -= A[k * n + j] * A[j * n + k1];
-    //     }
-    // }
+        for (j = ib + 1; ib < end; ib ++)
+        {
+            for (k = end + 1; k < n; k ++)
+                for (j1 = ib; ib < end; ib ++)
+                    A[j * n + k] = A[j * n + k] / A[j * n + j1];
+            for (k = end + 1; k < n; k ++)
+                for (k1 = end + 1; k1 < n; k1 ++)
+                    A[k * n + k1] -= A[k * n + j] * A[j * n + k1];
+        }
+    }
     return 0;
 }
 
