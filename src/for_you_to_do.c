@@ -108,19 +108,19 @@ void mydtrsv(char UPLO, double *A, double *B, int n, int *ipiv)
         double sum = 0;
         for (j = 0; j <= i - 1; j++) {
             sum += y[j] * A[i * n + j];
-            y[i] = B[ipiv[i]] - sum;
         }
+        y[i] = B[ipiv[i]] - sum;
     }
     if (UPLO == 'L')  //backward substitution
     {
-        x[n - 1] = y[n - 1] / A[n * n - n + n - 1];
+        x[n - 1] = y[n - 1] / A[n * n - 1];
         for (i = n - 1 - 1; i >= 0; i--)
         {
             double sum = 0;
             for (j = i + 1; j <= n; j++) {
                 sum += x[j] * A[i * n + j];
-                x[i] = (y[i] - sum) / A[i * n + i];
             }
+            x[i] = (y[i] - sum) / A[i * n + i];
         }
     }
     return;
